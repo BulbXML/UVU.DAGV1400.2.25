@@ -19,14 +19,34 @@ public class AnimationController : MonoBehaviour
 
     private void HandleAnimations()
     {
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            animator.SetTrigger("RunTrigger");
+        }
+        else
+        {
+            animator.SetTrigger("Idle");
+        }
         if (Input.GetButtonDown("Jump"))
+        {
+            animator.SetTrigger("JumpTrigger");
+        }
+        else
+        {
+            animator.SetTrigger("Idle");
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            animator.SetTrigger("ILOVEWALLJUMPS");
+        }
+        /* if (Input.GetButtonDown("Jump"))
         {
             animator.SetTrigger("DoubleJumpTrigger");
         }
         else
         {
             animator.SetTrigger("Idle");
-        }
+        } */
         if (Input.GetKeyDown(KeyCode.H))
         {
             animator.SetTrigger("HitTrigger");

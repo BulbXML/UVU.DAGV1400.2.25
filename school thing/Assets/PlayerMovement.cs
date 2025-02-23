@@ -1,11 +1,15 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-public class PlayerMovement : MonoBehaviour
+public class SimpleCharacterController : MonoBehaviour
 {
-    [SerializeField] public float speed = 5f;
+    [SerializeField] public float moveSpeed = 5f;
+    [SerializeField] public float jumpForce = 2f;
+    [SerializeField] public float gravity = -9.81f;
+
     private CharacterController controller;
     private Transform thisTransform;
-    private Vector3 movementVector = Vector3.zero;
+    private Vector3 velocity = Vector3.zero;
 
     private void Start()
     {
@@ -16,14 +20,33 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         MoveCharacter();
+        ApplyGravity();
         KeepCharacterOnXAxis();
     }
-    
+
     private void MoveCharacter()
     {
-        movementVector.x = Input.GetAxis("Horizontal");
-        movementVector *= (speed * Time.deltaTime);
-        controller.Move(movementVector);
+        var moveInput = Input.GetAxis("Horizontal");
+        var move = new Vector3(moveInput, 0, 0) * (moveSpeed * Time.deltaTime);
+
+        if (controller.isGrounded)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
+            }
+        }
+
+        move.y = velocity.y * Time.deltaTime;  // Apply gravity
+        controller.Move(move);
+    }
+
+    private void ApplyGravity()
+    {
+        if (!controller.isGrounded)
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
     }
 
     private void KeepCharacterOnXAxis()
