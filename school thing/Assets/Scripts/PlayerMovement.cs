@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,6 +12,8 @@ public class SimpleCharacterController : MonoBehaviour
     private CharacterController controller;
     private Transform thisTransform;
     private Vector3 velocity = Vector3.zero;
+
+    public bool IsGrounded => controller.isGrounded;
 
     private void Start()
     {
@@ -24,11 +28,10 @@ public class SimpleCharacterController : MonoBehaviour
         KeepCharacterOnXAxis();
     }
 
-    private void MoveCharacter()
+    public void MoveCharacter()
     {
         var moveInput = Input.GetAxis("Horizontal");
         var move = new Vector3(moveInput, 0, 0) * (moveSpeed * Time.deltaTime);
-
         if (controller.isGrounded)
         {
             if (Input.GetButtonDown("Jump"))
